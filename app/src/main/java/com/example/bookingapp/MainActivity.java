@@ -1,7 +1,5 @@
 package com.example.bookingapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,13 +11,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     // Ініціалізація змінних
-    Button buttonNewBooking;
-    TextView textViewBookings;
-    TextView textViewNoBookings;
-    Button buttonClearBookings;
+    Button buttonNewBooking, buttonClearBookings;
+    TextView textViewBookings, textViewNoBookings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
