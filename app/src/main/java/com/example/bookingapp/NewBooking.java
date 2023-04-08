@@ -32,10 +32,8 @@ public class NewBooking extends AppCompatActivity {
     Calendar dateAndTime = Calendar.getInstance();
 
     // Ініціалізація змінних
-    TextView NumberOfPeopleValue;
+    TextView NumberOfPeopleValue, SelectedDate, SelectedTime;
     SeekBar NumberOfPeopleSeekBar;
-    TextView SelectedDate;
-    TextView SelectedTime;
     Button selectTimeButton;
 
     @Override
