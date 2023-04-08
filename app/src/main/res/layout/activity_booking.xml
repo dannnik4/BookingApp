@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".NewBooking">
+
+    <!-- Напис "Нове бронювання" -->
+    <TextView
+        android:id="@+id/NewBooking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Нове бронювання"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Рядок "Ім'я" -->
+    <EditText
+        android:id="@+id/NameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Ім'я"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/NewBooking" />
+
+    <!-- Рядок "Номер телефону" -->
+    <EditText
+        android:id="@+id/PhoneEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Номер телефону"
+        android:inputType="phone"
+        app:layout_constraintTop_toBottomOf="@id/NameEditText" />
+
+    <!-- Напис "Кількість людей" -->
+    <TextView
+        android:id="@+id/NumberOfPeople"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Кількість людей:"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/PhoneEditText" />
+
+    <!-- Значення кількісті людей -->
+    <TextView
+        android:id="@+id/NumberOfPeopleValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/NumberOfPeople" />
+
+    <!-- Слайдер для обирання кількості людей -->
+    <SeekBar
+        android:id="@+id/NumberOfPeopleSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:max="10"
+        android:min="0"
+        android:progress="1"
+        app:layout_constraintTop_toBottomOf="@id/NumberOfPeopleValue" />
+
+    <!-- Напис "Дата бронювання" -->
+    <TextView
+        android:id="@+id/DateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Дата бронювання:"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/NumberOfPeopleSeekBar" />
+
+    <!-- Значення дати -->
+    <TextView
+        android:id="@+id/SelectedDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/DateTextView"
+        app:layout_constraintRight_toLeftOf="@+id/DateButton" />
+
+    <!-- Кнопка "Змінити дату" -->
+    <Button
+        android:id="@+id/DateButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5"
+        android:layout_marginTop="10dp"
+        android:onClick="setDate"
+        android:text="Змінити дату"
+        app:layout_constraintTop_toBottomOf="@id/DateTextView"
+        app:layout_constraintLeft_toRightOf="@+id/SelectedDate" />
+
+    <!-- Напис "Час бронювання" -->
+    <TextView
+        android:id="@+id/TimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Час бронювання:"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/DateButton" />
+
+    <!-- Значення часу -->
+    <TextView
+        android:id="@+id/SelectedTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/TimeTextView"
+        app:layout_constraintRight_toLeftOf="@+id/TimeButton" />
+
+    <!-- Кнопка "Змінити час" -->
+    <Button
+        android:id="@+id/TimeButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5"
+        android:layout_marginTop="10dp"
+        android:onClick="setTime"
+        android:text="Змінити час"
+        app:layout_constraintTop_toBottomOf="@id/TimeTextView"
+        app:layout_constraintLeft_toRightOf="@id/SelectedTime" />
+
+    <!-- Кнопка "Зберегти бронювання" -->
+    <Button
+        android:id="@+id/SaveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Зберегти бронювання"
+        android:onClick="SaveButtonClick"
+        app:layout_constraintTop_toBottomOf="@id/TimeButton" />
+
+    <!-- Кнопка "Відмінити бронювання" -->
+    <Button
+        android:id="@+id/CancelButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Відмінити бронювання"
+        android:onClick="CancelButtonClick"
+        app:layout_constraintTop_toBottomOf="@id/SaveButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
