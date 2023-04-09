@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         bookingCall.enqueue(new Callback<GetBooking>() {
             @Override
             public void onResponse(Call<GetBooking> call, Response<GetBooking> response) {
-                //Отримання списку юронювань з відповіді сервера
+                // Отримання списку юронювань з відповіді сервера
                 List<Booking> bookingList = response.body().getListBooking();
                 // Створення адаптеру для відображення списку бронювань
                 mAdapter = new AdapterBooking(bookingList, MainActivity.this);
