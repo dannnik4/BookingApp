@@ -1,12 +1,9 @@
 package com.example.bookingapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -21,10 +18,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NewBooking extends AppCompatActivity {
 
@@ -37,6 +40,7 @@ public class NewBooking extends AppCompatActivity {
     TextView SelectedDate;
     TextView SelectedTime;
     Button selectTimeButton;
+    BookingInterface bookingInterface;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -272,31 +276,27 @@ public class NewBooking extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Дії при натисканні на кнопку "OK"
-                SharedPreferences sharedPreferences = getSharedPreferences("BOOKINGS", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                bookingInterface = ApiClient.getClient().create(BookingInterface.class);
+                Call<AddBooking> postPutGetDelBooking = bookingInterface.postBooking(
+                  nameEditText.getText().toString(),
+                  phoneEditText.getText().toString(),
+                  Integer.parseInt(NumberOfPeopleValue.getText().toString()),
+                  SelectedDate.getText().toString(),
+                  SelectedTime.getText().toString()
+                );
+                postPutGetDelBooking.enqueue(new Callback<AddBooking>() {
+                    @Override
+                    public void onResponse(Call<AddBooking> call, Response<AddBooking> response) {
+                        Toast.makeText(NewBooking.this,"Бронювання збережено", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(NewBooking.this, MainActivity.class);
+                        startActivity(intent);
+                    }
 
-                // Отримуємо останній збережений індекс
-                int lastIndex = sharedPreferences.getInt("LAST_INDEX", -1);
-
-                // Збільшуємо індекс на 1, якщо останній збережений індекс >= 0, інакше індекс буде 0
-                int newIndex = (lastIndex >= 0) ? lastIndex + 1 : 0;
-
-                // Зберігаємо новий індекс
-                editor.putInt("LAST_INDEX", newIndex);
-
-                // Використовуємо новий індекс як ключ для збереження даних
-                editor.putString("NAME_" + newIndex, nameEditText.getText().toString());
-                editor.putString("PHONE_" + newIndex, phoneEditText.getText().toString());
-                editor.putInt("PEOPLE_" + newIndex, Integer.parseInt(NumberOfPeopleValue.getText().toString()));
-                editor.putString("DATE_" + newIndex, SelectedDate.getText().toString());
-                editor.putString("TIME_" + newIndex, SelectedTime.getText().toString());
-                editor.apply();
-
-                // Повертаємося до начальної сторінки та закриваємо поточну сторінку
-                Intent intent = new Intent(NewBooking.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
+                    @Override
+                    public void onFailure(Call<AddBooking> call, Throwable t) {
+                        Toast.makeText(NewBooking.this,"Помилка", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         builder.setNegativeButton("Скасувати", new DialogInterface.OnClickListener() {
