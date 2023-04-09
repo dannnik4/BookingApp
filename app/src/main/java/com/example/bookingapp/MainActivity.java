@@ -1,10 +1,7 @@
 package com.example.bookingapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,13 +10,25 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
 
     // Ініціалізація змінних
-    Button buttonNewBooking;
-    TextView textViewBookings;
+    Button buttonNewBooking, buttonUpdateBookings;
     TextView textViewNoBookings;
-    Button buttonClearBookings;
+    RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mlayoutManager;
+    BookingInterface mBookingInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,84 +37,42 @@ public class MainActivity extends AppCompatActivity {
 
         //Оголошення змінних
         buttonNewBooking = findViewById(R.id.buttonNewBooking);
-        textViewBookings = findViewById(R.id.textViewBookings);
         textViewNoBookings = findViewById(R.id.textViewNoBookings);
-        buttonClearBookings = findViewById(R.id.buttonClearBookings);
+        buttonUpdateBookings = findViewById(R.id.buttonUpdateBookings);
+        recyclerView = findViewById(R.id.ViewBookings);
 
-        // Отримання збереженних значень
-        SharedPreferences sharedPreferences = getSharedPreferences("BOOKINGS", MODE_PRIVATE);
-        // Перевірка, чі порожній файл з бронюваннями або ні
-        if (sharedPreferences.getAll().isEmpty() || !sharedPreferences.contains("NAME_0")) {
-            textViewNoBookings.setVisibility(View.VISIBLE);
-            textViewBookings.setVisibility(View.GONE);
-            buttonClearBookings.setVisibility(View.GONE);
-            return;
-        } else {
-            textViewNoBookings.setVisibility(View.GONE);
-            textViewBookings.setVisibility(View.VISIBLE);
-            buttonClearBookings.setVisibility(View.VISIBLE);
-        }
+        mlayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mlayoutManager);
+        recyclerView.setHasFixedSize(true);
+        getAllBooking();
+    }
 
-        // Отримання останнього збереженого індексу
-        int lastIndex = sharedPreferences.getInt("LAST_INDEX", 0);
-
-        // Створення рядка для об'єднання усіх раніше створених рядків
-        StringBuilder bookingsStringBuilder = new StringBuilder();
-
-        // Отримання значень для кожного ключа
-        for (int i = 0; i <= lastIndex; i++) {
-            String name = sharedPreferences.getString("NAME_" + i, "");
-            String phone = sharedPreferences.getString("PHONE_" + i, "");
-            int people = sharedPreferences.getInt("PEOPLE_" + i, 0);
-            String date = sharedPreferences.getString("DATE_" + i, "");
-            String time = sharedPreferences.getString("TIME_" + i, "");
-
-            // Створення новії строки для поточного бронювання
-            StringBuilder bookingStringBuilder = new StringBuilder();
-
-            // Побудова рядка із отриманних значень
-            bookingStringBuilder.append("Ім'я: ").append(name).append("\n");
-            bookingStringBuilder.append("Номер телефону: ").append(phone).append("\n");
-            bookingStringBuilder.append("Кількість людей: ").append(people).append("\n");
-            bookingStringBuilder.append("Дата бронювання: ").append(date).append("\n");
-            bookingStringBuilder.append("Час бронювання: ").append(time).append("\n\n");
-
-            // Додавання поточне бронювання до загального списку бронювань
-            bookingsStringBuilder.append(bookingStringBuilder.toString());
-        }
-
-        // Перевіряємо, чи є бронювання
-        if (bookingsStringBuilder.length() == 0) {
-            textViewNoBookings.setVisibility(View.VISIBLE);
-            textViewBookings.setVisibility(View.GONE);
-            buttonClearBookings.setVisibility(View.GONE);
-        } else {
-            textViewNoBookings.setVisibility(View.GONE);
-            textViewBookings.setVisibility(View.VISIBLE);
-            buttonClearBookings.setVisibility(View.VISIBLE);
-        }
-
-        // Встановлення рядка для його відображення
-        textViewBookings.setText(bookingsStringBuilder.toString());
-
-        // Додавання обробника для кнопки очищення бронювань
-        buttonClearBookings.setOnClickListener(new View.OnClickListener() {
+    // Викликаємо функцію для отримання всіх бронювань з сервера
+    private void getAllBooking() {
+        mBookingInterface = ApiClient.getClient().create(BookingInterface.class); //Оброблення результатів запиту
+        Call<GetBooking> bookingCall = mBookingInterface.getAllBooking("all");
+        bookingCall.enqueue(new Callback<GetBooking>() {
             @Override
-            public void onClick(View v) {
-                // Видалення файлу зі список бронювань
-                SharedPreferences sharedPreferences = getSharedPreferences("BOOKINGS", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.apply();
+            public void onResponse(Call<GetBooking> call, Response<GetBooking> response) {
+                //Отримання списку юронювань з відповіді сервера
+                List<Booking> bookingList = response.body().getListBooking();
+                // Створення адаптеру для відображення списку бронювань
+                mAdapter = new AdapterBooking(bookingList, MainActivity.this);
+                recyclerView.setAdapter(mAdapter);
 
-                // Оновлення відображення тексту та кнопок
-                textViewNoBookings.setVisibility(View.VISIBLE);
-                textViewBookings.setVisibility(View.GONE);
-                buttonClearBookings.setVisibility(View.GONE);
-                textViewBookings.setText("");
+                // Перевірка, чі є бронювання або ні
+                if (bookingList == null || bookingList.size() == 0) {
+                    textViewNoBookings.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                } else {
+                    textViewNoBookings.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+            }
 
-                // Виведення повідомлення про очищення бронювань
-                Toast.makeText(MainActivity.this, "Усі бронювання видалено", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailure(Call<GetBooking> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Помилка", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -122,6 +89,17 @@ public class MainActivity extends AppCompatActivity {
         if (MainActivity.isNetworkConnected(this)) {
             Intent intent = new Intent(MainActivity.this, NewBooking.class);
             startActivity(intent);
+        } else {
+            Toast.makeText(MainActivity.this, "Відсутнє підключення до інтернету", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    // Дії при натисканні на кнопку "Нове бронювання"
+    public void UpdateBookingClick(View view) {
+        if (MainActivity.isNetworkConnected(this)) {
+            getAllBooking();
+            Toast.makeText(MainActivity.this, "Бронювання оновлені", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(MainActivity.this, "Відсутнє підключення до інтернету", Toast.LENGTH_SHORT).show();
         }
