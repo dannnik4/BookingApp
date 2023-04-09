@@ -20,44 +20,41 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Блок с архівом бронювання -->
-    <ScrollView
+    <RelativeLayout
         android:id="@+id/bookingArchiveLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintTop_toBottomOf="@id/buttonNewBooking"
-        app:layout_constraintBottom_toTopOf="@id/buttonClearBookings">
+        app:layout_constraintBottom_toTopOf="@id/buttonUpdateBookings">
 
             <!-- Текст бронювання -->
-            <TextView
-                android:id="@+id/textViewBookings"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ViewBookings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp" />
-
-    </ScrollView>
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
     <!-- Напис "Нема бронювань" -->
     <TextView
         android:id="@+id/textViewNoBookings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="Нема бронювань"
-        android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/buttonNewBooking"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:textSize="20sp" />
 
-    <!-- Напис "Видалити бронювання" -->
+    </RelativeLayout>
+
+    <!-- Напис "Оновити бронювання" -->
     <Button
-        android:id="@+id/buttonClearBookings"
+        android:id="@+id/buttonUpdateBookings"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:text="Видалити бронювання"
+        android:layout_height="wrap_content"
+        android:text="Оновити бронювання"
+        android:onClick="UpdateBookingClick"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
