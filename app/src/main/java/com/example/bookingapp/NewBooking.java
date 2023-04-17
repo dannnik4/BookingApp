@@ -151,7 +151,7 @@ public class NewBooking extends AppCompatActivity {
     private void showTimePickerDialog() {
         final NumberPicker hourPicker = new NumberPicker(this);
         hourPicker.setMinValue(8);
-        hourPicker.setMaxValue(21);
+        hourPicker.setMaxValue(20);
         hourPicker.setValue(Calendar.HOUR_OF_DAY);
 
         final NumberPicker minutePicker = new NumberPicker(this);
