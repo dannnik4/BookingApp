@@ -100,25 +100,40 @@ public class NewBooking extends AppCompatActivity {
 
     // Встановлення початкової дати
     private void setInitialDate() {
+        Calendar now = Calendar.getInstance();
+        // Якщо поточний час пізніше 20:00
+        if (now.get(Calendar.HOUR_OF_DAY) >= 20) {
+            // Встановити дату на наступний день
+            now.add(Calendar.DAY_OF_MONTH, 1);
+        }
         SelectedDate.setText(DateUtils.formatDateTime(this,
-                dateAndTime.getTimeInMillis(),
+                now.getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
     }
 
     // Встановлення початкового часу
     private void setInitialTime() {
         Calendar now = Calendar.getInstance();
+        int hourOfDay = now.get(Calendar.HOUR_OF_DAY);
+        int minute = now.get(Calendar.MINUTE);
 
-        // Округлення поточного часу до найближчої десятки хвилин у майбутньому
-        int minute = (now.get(Calendar.MINUTE) / 10 + 1) * 10;
-        if (minute == 60) {
-            now.add(Calendar.HOUR_OF_DAY, 1);
+        // Якщо поточний час пізніше 20:00 або раніше 8:00
+        if (hourOfDay >= 20 || hourOfDay < 8 || (hourOfDay == 8 && minute < 0)) {
+            // Встановити час на 8:00
+            now.set(Calendar.HOUR_OF_DAY, 8);
             now.set(Calendar.MINUTE, 0);
+
+            // Якщо поточний час пізніше 20:00, встановити дату на наступний день
+            if (hourOfDay >= 20) {
+                now.add(Calendar.DAY_OF_MONTH, 1);
+            }
         } else {
+            // Округлити поточний час до ближчого значення, що ділиться на 10
+            minute = (minute / 10) * 10;
             now.set(Calendar.MINUTE, minute);
         }
 
-        // Встановлення часу в текстове поле
+        // Встановити час в текстове поле та у змінну dateAndTime
         SelectedTime.setText(DateUtils.formatDateTime(this,
                 now.getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_TIME));
