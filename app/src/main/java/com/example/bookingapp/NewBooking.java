@@ -128,9 +128,9 @@ public class NewBooking extends AppCompatActivity {
                 now.add(Calendar.DAY_OF_MONTH, 1);
             }
         } else {
-            // Округлити поточний час до ближчого значення, що ділиться на 10
-            minute = (minute / 10) * 10;
-            now.set(Calendar.MINUTE, minute);
+            // Встановити годину бронювання на найближчі 2 години від години на момент початку бронювання
+            now.set(Calendar.MINUTE, 0);
+            now.add(Calendar.HOUR_OF_DAY, 2);
         }
 
         // Встановити час в текстове поле та у змінну dateAndTime
