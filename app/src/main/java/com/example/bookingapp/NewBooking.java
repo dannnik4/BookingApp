@@ -149,15 +149,22 @@ public class NewBooking extends AppCompatActivity {
 
             // Порівняння вибраної дати з поточною датою
             Calendar currentDate = Calendar.getInstance();
+
+            // Перевіряємо, чи є обрана дата раніше поточної дати, і якщо так, то виводимо повідомлення
             if (selectedDate.before(currentDate)) {
                 // Якщо вибрана дата вже пройшла, показуємо повідомлення про помилку
                 Toast.makeText(NewBooking.this, "Оберіть майбутню дату", Toast.LENGTH_SHORT).show();
             } else {
-                // Інакше оновлюємо дату
-                dateAndTime.set(Calendar.YEAR, year);
-                dateAndTime.set(Calendar.MONTH, monthOfYear);
-                dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                setInitialDate();
+                // Перевіряємо, чи є обрана дата поточною датою і час пізніше або дорівнює 20:00 і якщо так, тоді виводимо повідомлення
+                if (selectedDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) && selectedDate.get(Calendar.DAY_OF_YEAR) == currentDate.get(Calendar.DAY_OF_YEAR) && selectedDate.get(Calendar.HOUR_OF_DAY) >= 20) {
+                    Toast.makeText(NewBooking.this, "Оберіть майбутню дату", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Інакше оновлюємо дату
+                    dateAndTime.set(Calendar.YEAR, year);
+                    dateAndTime.set(Calendar.MONTH, monthOfYear);
+                    dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    setInitialDate();
+                }
             }
         }
     };
