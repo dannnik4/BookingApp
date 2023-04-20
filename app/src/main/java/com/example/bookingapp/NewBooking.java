@@ -171,6 +171,17 @@ public class NewBooking extends AppCompatActivity {
 
     // Створення віджету для обирання годин та хвилин
     private void showTimePickerDialog() {
+
+        // Отримання поточного часу
+        String currentTimeString = SelectedTime.getText().toString();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(dateFormat.parse(currentTimeString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         final NumberPicker hourPicker = new NumberPicker(this);
         hourPicker.setMinValue(8);
         hourPicker.setMaxValue(20);
@@ -199,16 +210,6 @@ public class NewBooking extends AppCompatActivity {
         View spacer2 = new View(this);
         spacer2.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 1));
         layout.addView(spacer2);
-
-        // Отримання поточного часу
-        String currentTimeString = SelectedTime.getText().toString();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        Calendar calendar = Calendar.getInstance();
-        try {
-            calendar.setTime(dateFormat.parse(currentTimeString));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         // Встановлення значень у віджет
         hourPicker.setValue(calendar.get(Calendar.HOUR_OF_DAY));
