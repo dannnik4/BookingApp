@@ -39,17 +39,17 @@
         android:inputType="phone"
         app:layout_constraintTop_toBottomOf="@id/NameEditText" />
 
-    <!-- Напис "Кількість людей" -->
+    <!-- Напис "Кількість осіб" -->
     <TextView
         android:id="@+id/NumberOfPeople"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Кількість людей:"
+        android:text="Кількість осіб:"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@id/PhoneEditText" />
 
-    <!-- Значення кількісті людей -->
+    <!-- Значення кількісті осіб -->
     <TextView
         android:id="@+id/NumberOfPeopleValue"
         android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/NumberOfPeople" />
 
-    <!-- Слайдер для обирання кількості людей -->
+    <!-- Слайдер для обирання кількості осіб -->
     <SeekBar
         android:id="@+id/NumberOfPeopleSeekBar"
         android:layout_width="match_parent"
