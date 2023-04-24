@@ -45,12 +45,12 @@ public class NewBooking extends AppCompatActivity {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_booking);
 
-        // Оголошення змінних для обирання кількості людей
+        // Оголошення змінних для обирання кількості осіб
         NumberOfPeopleSeekBar = findViewById(R.id.NumberOfPeopleSeekBar);
         NumberOfPeopleValue = findViewById(R.id.NumberOfPeopleValue);
         NumberOfPeopleValue.setText(String.valueOf(NumberOfPeopleSeekBar.getProgress()));
 
-        // Обробники натискань на слайдер обирання кількості людей
+        // Обробники натискань на слайдер обирання кількості осіб
         NumberOfPeopleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar NumberOfPeopleSeekBar, int progress, boolean fromUser) {
