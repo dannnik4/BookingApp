@@ -38,6 +38,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         holder.ViewPeople.setText("Кількість людей: " + mBookingList.get(position).getBooking_people());
         holder.ViewDate.setText("Дата бронювання: " + mBookingList.get(position).getBooking_date());
         holder.ViewTime.setText("Час бронювання: " + mBookingList.get(position).getBooking_time());
+        holder.ViewComment.setText("Комментар: " + mBookingList.get(position).getBooking_comment());
     }
 
     // Повернення кількісті елементів у списку бронювань
@@ -48,7 +49,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView ViewName, ViewPhone, ViewPeople, ViewDate, ViewTime; // Елементи макету
+        public TextView ViewName, ViewPhone, ViewPeople, ViewDate, ViewTime,ViewComment; // Елементи макету
         public MyViewHolder(View bookingView){ // Конструктор ViewHolder
             super(bookingView);
             // Ініціалізація елементів з макету
@@ -57,6 +58,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
             ViewPeople = bookingView.findViewById(R.id.ViewPeople);
             ViewDate = bookingView.findViewById(R.id.ViewDate);
             ViewTime = bookingView.findViewById(R.id.ViewTime);
+            ViewComment = bookingView.findViewById(R.id.ViewComment);
         }
     }
 }
