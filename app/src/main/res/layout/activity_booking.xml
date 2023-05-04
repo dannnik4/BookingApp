@@ -139,6 +139,19 @@
         app:layout_constraintTop_toBottomOf="@id/TimeTextView"
         app:layout_constraintLeft_toRightOf="@id/SelectedTime" />
 
+    <!-- Рядок "Комментар" -->
+    <EditText
+        android:id="@+id/CommentEditText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Комментар (не обов'язково)"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        app:layout_constraintTop_toBottomOf="@id/TimeButton"
+        app:layout_constraintBottom_toTopOf="@id/SaveButton" />
+
     <!-- Кнопка "Зберегти бронювання" -->
     <Button
         android:id="@+id/SaveButton"
@@ -147,7 +160,7 @@
         android:layout_marginTop="10dp"
         android:text="Зберегти бронювання"
         android:onClick="SaveButtonClick"
-        app:layout_constraintTop_toBottomOf="@id/TimeButton" />
+        app:layout_constraintBottom_toTopOf="@id/CancelButton" />
 
     <!-- Кнопка "Відмінити бронювання" -->
     <Button
@@ -156,6 +169,6 @@
         android:layout_height="wrap_content"
         android:text="Відмінити бронювання"
         android:onClick="CancelButtonClick"
-        app:layout_constraintTop_toBottomOf="@id/SaveButton" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
