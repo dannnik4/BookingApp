@@ -23,6 +23,9 @@ public class Booking {
     @SerializedName("booking_time")
     private String booking_time;
 
+    @SerializedName("booking_comment")
+    private String booking_comment;
+
     // Оголошення методів геттерів і сеттерів для кожного об'єкту бронювання
     public String getBooking_id() {
         return booking_id;
@@ -70,5 +73,13 @@ public class Booking {
 
     public void setBooking_time(String booking_time) {
         this.booking_time = booking_time;
+    }
+
+    public String getBooking_comment() {
+        return booking_comment;
+    }
+
+    public void setBooking_comment(String booking_comment) {
+        this.booking_comment = booking_comment;
     }
 }
