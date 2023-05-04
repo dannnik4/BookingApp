@@ -262,6 +262,9 @@ public class NewBooking extends AppCompatActivity {
         EditText phoneEditText = findViewById(R.id.PhoneEditText);
         String phone = phoneEditText.getText().toString().trim();
 
+        EditText commentEditText = findViewById(R.id.CommentEditText);
+        String comment = commentEditText.getText().toString().trim();
+
         // Перевірка, чи заповнені ім'я та номер телефону та наявність підключення до інтернету
         if (name.isEmpty() || phone.isEmpty()) {
             Toast.makeText(this, "Будь ласка, заповніть всі поля", Toast.LENGTH_SHORT).show();
@@ -281,7 +284,8 @@ public class NewBooking extends AppCompatActivity {
                 "Номер телефону: <b>" + phone + "</b>" + "<br>" +
                 "Кількість людей: <b>" + NumberOfPeopleValue.getText().toString() + "</b>" + "<br>" +
                 "Дата бронювання: <b>" + SelectedDate.getText().toString() + "</b>" + "<br>" +
-                "Час бронювання: <b>" + SelectedTime.getText().toString() + "</b>";
+                "Час бронювання: <b>" + SelectedTime.getText().toString() + "</b>" + "<br>" +
+                "Комментар: <b>" + comment + "</b>";
 
         // Пераметри форматування тексту
         TextView textView = new TextView(this);
@@ -303,7 +307,8 @@ public class NewBooking extends AppCompatActivity {
                   phoneEditText.getText().toString(),
                   Integer.parseInt(NumberOfPeopleValue.getText().toString()),
                   SelectedDate.getText().toString(),
-                  SelectedTime.getText().toString()
+                  SelectedTime.getText().toString(),
+                  commentEditText.getText().toString()
                 );
                 postPutGetDelBooking.enqueue(new Callback<AddBooking>() {
                     @Override
