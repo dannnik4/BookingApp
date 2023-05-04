@@ -45,4 +45,12 @@
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/ViewDate" />
 
+    <!-- Рядок "Номер телефону" -->
+    <TextView
+        android:id="@+id/ViewComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/ViewTime" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
