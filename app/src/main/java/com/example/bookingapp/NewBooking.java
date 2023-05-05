@@ -288,8 +288,11 @@ public class NewBooking extends AppCompatActivity {
                 "Номер телефону: <b>" + phone + "</b>" + "<br>" +
                 "Кількість людей: <b>" + NumberOfPeopleValue.getText().toString() + "</b>" + "<br>" +
                 "Дата бронювання: <b>" + SelectedDate.getText().toString() + "</b>" + "<br>" +
-                "Час бронювання: <b>" + SelectedTime.getText().toString() + "</b>" + "<br>" +
-                "Комментар: <b>" + comment + "</b>";
+                "Час бронювання: <b>" + SelectedTime.getText().toString() + "</b>";
+
+        if (!comment.isEmpty()) {
+            message += "<br>Комментар: <b>" + comment + "</b>";
+        }
 
         // Пераметри форматування тексту
         TextView textView = new TextView(this);
