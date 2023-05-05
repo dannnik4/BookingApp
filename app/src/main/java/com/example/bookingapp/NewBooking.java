@@ -163,7 +163,11 @@ public class NewBooking extends AppCompatActivity {
                     dateAndTime.set(Calendar.YEAR, year);
                     dateAndTime.set(Calendar.MONTH, monthOfYear);
                     dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    setInitialDate();
+                    // Форматуємо дату у відповідний вигляд та встановлюємо її в SelectedDate
+                    String formattedDate = DateUtils.formatDateTime(NewBooking.this,
+                            dateAndTime.getTimeInMillis(),
+                            DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
+                    SelectedDate.setText(formattedDate);
                 }
             }
         }
