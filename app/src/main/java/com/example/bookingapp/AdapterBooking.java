@@ -39,6 +39,14 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         holder.ViewDate.setText("Дата бронювання: " + mBookingList.get(position).getBooking_date());
         holder.ViewTime.setText("Час бронювання: " + mBookingList.get(position).getBooking_time());
         holder.ViewComment.setText("Комментар: " + mBookingList.get(position).getBooking_comment());
+
+        String comment = mBookingList.get(position).getBooking_comment();
+        if (comment.isEmpty()) {
+            holder.ViewComment.setVisibility(View.GONE); // Не відображати ViewComment, якщо коментар порожній
+        } else {
+            holder.ViewComment.setVisibility(View.VISIBLE); // Відображати ViewComment, якщо коментар не порожній
+            holder.ViewComment.setText("Комментар: " + mBookingList.get(position).getBooking_comment());
+        }
     }
 
     // Повернення кількісті елементів у списку бронювань
