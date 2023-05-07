@@ -117,14 +117,14 @@ public class NewBooking extends AppCompatActivity {
         int hourOfDay = now.get(Calendar.HOUR_OF_DAY);
         int minute = now.get(Calendar.MINUTE);
 
-        // Якщо поточний час пізніше 20:00 або раніше 8:00
-        if (hourOfDay >= 20 || hourOfDay < 8 || (hourOfDay == 8 && minute < 0)) {
+        // Якщо поточний час пізніше 19:00 або раніше 8:00
+        if (hourOfDay >= 19 || hourOfDay < 8 || (hourOfDay == 8 && minute < 0)) {
             // Встановити час на 8:00
             now.set(Calendar.HOUR_OF_DAY, 8);
             now.set(Calendar.MINUTE, 0);
 
-            // Якщо поточний час пізніше 20:00, встановити дату на наступний день
-            if (hourOfDay >= 20) {
+            // Якщо поточний час пізніше 19:00, встановити дату на наступний день
+            if (hourOfDay >= 19) {
                 now.add(Calendar.DAY_OF_MONTH, 1);
             }
         } else {
@@ -186,10 +186,33 @@ public class NewBooking extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        final Calendar now = Calendar.getInstance();
+        int hourOfDay = now.get(Calendar.HOUR_OF_DAY);
+        int minute = now.get(Calendar.MINUTE);
+
+        if (hourOfDay >= 19 || hourOfDay < 8 || (hourOfDay == 8 && minute < 0)) {
+            // Встановити час на 8:00
+            now.set(Calendar.HOUR_OF_DAY, 8);
+            now.set(Calendar.MINUTE, 0);
+
+            // Якщо поточний час пізніше 20:00, встановити дату на наступний день
+            if (hourOfDay >= 20) {
+                now.add(Calendar.DAY_OF_MONTH, 1);
+            }
+        } else {
+            // Встановити годину бронювання на найближчі 2 години від години на момент початку бронювання
+            now.set(Calendar.MINUTE, 0);
+            now.add(Calendar.HOUR_OF_DAY, 2);
+        }
+
+        int startHour = now.get(Calendar.HOUR_OF_DAY);
+        int maxValue = 20;
+
         final NumberPicker hourPicker = new NumberPicker(this);
-        hourPicker.setMinValue(8);
-        hourPicker.setMaxValue(20);
-        hourPicker.setValue(Calendar.HOUR_OF_DAY);
+        hourPicker.setMinValue(startHour);
+        hourPicker.setMaxValue(maxValue);
+        hourPicker.setValue(startHour);
+
 
         final NumberPicker minutePicker = new NumberPicker(this);
         minutePicker.setMinValue(0);
