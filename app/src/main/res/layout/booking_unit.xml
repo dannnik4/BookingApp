@@ -57,7 +57,7 @@
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/ViewTime" />
 
-    <!-- Кнопка "Змінити час" -->
+    <!-- Кнопка "Редагувати" -->
     <Button
         android:id="@+id/EditButton"
         android:layout_width="0dp"
@@ -71,7 +71,7 @@
         app:layout_constraintTop_toBottomOf="@id/ViewComment"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <!-- Кнопка "Змінити час" -->
+    <!-- Кнопка "Видалити" -->
     <Button
         android:id="@+id/DeleteButton"
         android:layout_width="0dp"
