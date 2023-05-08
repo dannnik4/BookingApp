@@ -5,6 +5,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface BookingInterface {
@@ -24,5 +25,18 @@ public interface BookingInterface {
       @Field("booking_date") String SelectedDate,
       @Field("booking_time") String SelectedTime,
       @Field("booking_comment") String commentEditText
+    );
+
+    @FormUrlEncoded // Анотація FormUrlEncoded для вказівки того, що параметри повинні кодуватися у форматі URL-кодування
+    @PUT("booking") // Метод PUT
+    Call<AddBooking> putBooking(
+            // Анотації Field для позначення полів, що відповідають вхідним параметрам для PUT-запиту
+            @Field("booking_id_old") String BookingID,
+            @Field("booking_name") String nameEditText,
+            @Field("booking_phone") String phoneEditText,
+            @Field("booking_people") Integer NumberOfPeopleValue,
+            @Field("booking_date") String SelectedDate,
+            @Field("booking_time") String SelectedTime,
+            @Field("booking_comment") String commentEditText
     );
 }
