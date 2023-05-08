@@ -1,9 +1,11 @@
 package com.example.bookingapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,12 +15,12 @@ import java.util.List;
 
 public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHolder> {
     public static List<Booking> mBookingList; // Список бронювань
-    private Context context;
+    private Context ctx;
 
     // Конструктор адаптеру та ініціалізація списку бронювань
-    public AdapterBooking(List<Booking> mBookingList, MainActivity mainActivity) {
+    public AdapterBooking(List<Booking> mBookingList, Context context) {
         this.mBookingList = mBookingList;
-        this.context = context;
+        this.ctx = context;
     }
 
     // Метод для створення нових ViewHolder для відображення кожного з бронювань
@@ -30,7 +32,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         return myViewHolder;
     }
 
-    // Метод для заповнення даними елементів ViewHolder
+    // Метод для заполнения данными элементов ViewHolder
     @Override
     public void onBindViewHolder(@NonNull AdapterBooking.MyViewHolder holder, int position) {
         holder.ViewName.setText("Ім'я: " + mBookingList.get(position).getBooking_name());
@@ -47,6 +49,32 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
             holder.ViewComment.setVisibility(View.VISIBLE); // Відображати ViewComment, якщо коментар не порожній
             holder.ViewComment.setText("Комментар: " + mBookingList.get(position).getBooking_comment());
         }
+
+        Button EditButton = holder.itemView.findViewById(R.id.EditButton);
+        Button DeleteButton = holder.itemView.findViewById(R.id.DeleteButton);
+        String booking_id = mBookingList.get(position).getBooking_id();
+
+        // Установка обработчика нажатия кнопки EditBooking
+        EditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onEditButtonClick(view, holder.getAdapterPosition(), booking_id, mBookingList.get(position).getBooking_name(), mBookingList.get(position).getBooking_phone(), mBookingList.get(position).getBooking_people(), mBookingList.get(position).getBooking_date(), mBookingList.get(position).getBooking_time(), mBookingList.get(position).getBooking_comment());
+            }
+        });
+    }
+
+    // Метод для обработки нажатия кнопки EditBooking
+    private void onEditButtonClick(View view, int position, String booking_id, String Booking_name, String Booking_phone, String Booking_people, String Booking_date, String Booking_time, String Booking_comment) {
+
+        Intent intent_edit = new Intent (ctx,EditBooking.class);
+        EditBooking.BookingID_edit = booking_id;
+        intent_edit.putExtra("Booking_name",Booking_name);
+        intent_edit.putExtra("Booking_phone",Booking_phone);
+        intent_edit.putExtra("Booking_people",Booking_people);
+        intent_edit.putExtra("Booking_date",Booking_date);
+        intent_edit.putExtra("Booking_time",Booking_time);
+        intent_edit.putExtra("Booking_comment",Booking_comment);
+        ctx.startActivity(intent_edit);
     }
 
     // Повернення кількісті елементів у списку бронювань
