@@ -2,7 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp"
+    android:layout_marginBottom="15dp"
+    android:paddingTop="5dp"
+    android:paddingRight="5dp"
+    android:paddingLeft="5dp"
+    android:background="#DCDCDC"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Рядок "Ім'я" -->
@@ -52,5 +56,33 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/ViewTime" />
+
+    <!-- Кнопка "Змінити час" -->
+    <Button
+        android:id="@+id/EditButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.45"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="13dp"
+        android:onClick="EditBooking"
+        android:text="Редагувати"
+        app:layout_constraintTop_toBottomOf="@id/ViewComment"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <!-- Кнопка "Змінити час" -->
+    <Button
+        android:id="@+id/DeleteButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.45"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="13dp"
+        android:onClick="DeleteBooking"
+        android:text="Видалити"
+        app:layout_constraintTop_toBottomOf="@id/ViewComment"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
