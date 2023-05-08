@@ -64,10 +64,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent="0.45"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="13dp"
-        android:onClick="EditBooking"
         android:text="Редагувати"
+        android:onClick="onEditButtonClick"
         app:layout_constraintTop_toBottomOf="@id/ViewComment"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -78,10 +78,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent="0.45"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginRight="13dp"
-        android:onClick="DeleteBooking"
         android:text="Видалити"
+        android:onClick="onDeleteButtonClick"
         app:layout_constraintTop_toBottomOf="@id/ViewComment"
         app:layout_constraintRight_toRightOf="parent" />
 
