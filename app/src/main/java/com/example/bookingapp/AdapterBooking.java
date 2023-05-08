@@ -35,7 +35,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
     public void onBindViewHolder(@NonNull AdapterBooking.MyViewHolder holder, int position) {
         holder.ViewName.setText("Ім'я: " + mBookingList.get(position).getBooking_name());
         holder.ViewPhone.setText("Номер телефону: " + mBookingList.get(position).getBooking_phone());
-        holder.ViewPeople.setText("Кількість людей: " + mBookingList.get(position).getBooking_people());
+        holder.ViewPeople.setText("Кількість осіб: " + mBookingList.get(position).getBooking_people());
         holder.ViewDate.setText("Дата бронювання: " + mBookingList.get(position).getBooking_date());
         holder.ViewTime.setText("Час бронювання: " + mBookingList.get(position).getBooking_time());
         holder.ViewComment.setText("Комментар: " + mBookingList.get(position).getBooking_comment());
