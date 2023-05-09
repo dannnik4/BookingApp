@@ -7,11 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHolder> {
     public static List<Booking> mBookingList; // Список бронювань
@@ -61,11 +66,18 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
                 onEditButtonClick(view, holder.getAdapterPosition(), booking_id, mBookingList.get(position).getBooking_name(), mBookingList.get(position).getBooking_phone(), mBookingList.get(position).getBooking_people(), mBookingList.get(position).getBooking_date(), mBookingList.get(position).getBooking_time(), mBookingList.get(position).getBooking_comment());
             }
         });
+
+        // Установка обработчика нажатия кнопки DeleteBooking
+        DeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDeleteButtonClick(view, holder.getAdapterPosition(), booking_id);
+            }
+        });
     }
 
     // Метод для обработки нажатия кнопки EditBooking
     private void onEditButtonClick(View view, int position, String booking_id, String Booking_name, String Booking_phone, String Booking_people, String Booking_date, String Booking_time, String Booking_comment) {
-
         Intent intent_edit = new Intent (ctx,EditBooking.class);
         EditBooking.BookingID_edit = booking_id;
         intent_edit.putExtra("Booking_name",Booking_name);
@@ -75,6 +87,25 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         intent_edit.putExtra("Booking_time",Booking_time);
         intent_edit.putExtra("Booking_comment",Booking_comment);
         ctx.startActivity(intent_edit);
+    }
+
+    // Метод для обработки нажатия кнопки DeleteBooking
+    private void onDeleteButtonClick(View view, int position, String booking_id) {
+        BookingInterface bookingInterface = ApiClient.getClient().create(BookingInterface.class);
+        Call<AddBooking> delBooking = bookingInterface.deleteBooking(
+                booking_id
+        );
+        delBooking.enqueue(new Callback<AddBooking>() {
+            @Override
+            public void onResponse(Call<AddBooking> call, Response<AddBooking> response) {
+                Toast.makeText(ctx,"Бронювання видалено", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<AddBooking> call, Throwable t) {
+                Toast.makeText(ctx,"Помилка", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // Повернення кількісті елементів у списку бронювань
