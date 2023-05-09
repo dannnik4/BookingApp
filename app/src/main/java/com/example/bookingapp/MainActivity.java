@@ -94,8 +94,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    // Дії при натисканні на кнопку "Нове бронювання"
+    // Дії при натисканні на кнопку "Оновити бронювання"
     public void UpdateBookingClick(View view) {
         if (MainActivity.isNetworkConnected(this)) {
             getAllBooking();
