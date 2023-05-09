@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -39,4 +40,11 @@ public interface BookingInterface {
             @Field("booking_time") String SelectedTime,
             @Field("booking_comment") String commentEditText
     );
+
+
+    @FormUrlEncoded // Анотація FormUrlEncoded для вказівки того, що параметри повинні кодуватися у форматі URL-кодування
+    @HTTP(method = "DELETE", path = "Booking", hasBody = true)
+    Call<AddBooking> deleteBooking(
+            // Анотації Field для позначення полів, що відповідають вхідним параметрам для PUT-запиту
+            @Field("booking_id") String BookingID);
 }
