@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.Gravity;
@@ -297,6 +298,8 @@ public class NewBooking extends AppCompatActivity {
 
     // Дії при натисканні на кнопку "Зберегти бронювання"
     public void SaveButtonClick(View view) {
+        String AndroidID = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
         EditText nameEditText = findViewById(R.id.NameEditText);
         String name = nameEditText.getText().toString().trim();
 
@@ -347,6 +350,7 @@ public class NewBooking extends AppCompatActivity {
                 // Дії при натисканні на кнопку "OK"
                 bookingInterface = ApiClient.getClient().create(BookingInterface.class);
                 Call<AddBooking> postPutGetDelBooking = bookingInterface.postBooking(
+                  AndroidID,
                   nameEditText.getText().toString(),
                   phoneEditText.getText().toString(),
                   Integer.parseInt(NumberOfPeopleValue.getText().toString()),
