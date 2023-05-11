@@ -1,7 +1,9 @@
 package com.example.bookingapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,8 +27,19 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
 
     // Конструктор адаптеру та ініціалізація списку бронювань
     public AdapterBooking(List<Booking> mBookingList, Context context) {
-        this.mBookingList = mBookingList;
         this.ctx = context;
+        // Отримуємо унікальний ідентифікатор Android-пристрою
+        String androidId = Settings.Secure.getString(ctx.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        // Ітеруємося по списку бронювань та видаляємо ті, що не відносяться до поточного пристрою
+        Iterator<Booking> iterator = mBookingList.iterator();
+        while (iterator.hasNext()) {
+            Booking booking = iterator.next();
+            if (!booking.getAndroid_id().equals(androidId)) {
+                iterator.remove();
+            }
+        }
+        // Зберігаємо список бронювань, що відносяться до поточного пристрою
+        this.mBookingList = mBookingList;
     }
 
     // Метод для створення нових ViewHolder для відображення кожного з бронювань
@@ -37,9 +51,9 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         return myViewHolder;
     }
 
-    // Метод для заполнения данными элементов ViewHolder
+    // Метод заповнення даних елементів ViewHolder
     @Override
-    public void onBindViewHolder(@NonNull AdapterBooking.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterBooking.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.ViewName.setText("Ім'я: " + mBookingList.get(position).getBooking_name());
         holder.ViewPhone.setText("Номер телефону: " + mBookingList.get(position).getBooking_phone());
         holder.ViewPeople.setText("Кількість осіб: " + mBookingList.get(position).getBooking_people());
@@ -47,6 +61,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         holder.ViewTime.setText("Час бронювання: " + mBookingList.get(position).getBooking_time());
         holder.ViewComment.setText("Комментар: " + mBookingList.get(position).getBooking_comment());
 
+        // Отримання коментаря з бронювання та перевірка чи комментар порожній
         String comment = mBookingList.get(position).getBooking_comment();
         if (comment.isEmpty()) {
             holder.ViewComment.setVisibility(View.GONE); // Не відображати ViewComment, якщо коментар порожній
