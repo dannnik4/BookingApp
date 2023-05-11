@@ -79,7 +79,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onEditButtonClick(view, holder.getAdapterPosition(), android_id, booking_id, mBookingList.get(position).getBooking_name(), mBookingList.get(position).getBooking_phone(), mBookingList.get(position).getBooking_people(), mBookingList.get(position).getBooking_date(), mBookingList.get(position).getBooking_time(), mBookingList.get(position).getBooking_comment());
+                onEditButtonClick(view, holder.getAdapterPosition(), android_id, booking_id, mBookingList.get(position).getBooking_name(), mBookingList.get(position).getBooking_phone(), mBookingList.get(position).getBooking_people(), mBookingList.get(position).getBooking_datetime(), mBookingList.get(position).getBooking_date(), mBookingList.get(position).getBooking_time(), mBookingList.get(position).getBooking_comment());
             }
         });
 
@@ -93,13 +93,14 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
     }
 
     // Метод обробки натискання кнопки EditBooking
-    private void onEditButtonClick(View view, int position, String android_id, String booking_id, String Booking_name, String Booking_phone, String Booking_people, String Booking_date, String Booking_time, String Booking_comment) {
+    private void onEditButtonClick(View view, int position, String android_id, String booking_id, String Booking_name, String Booking_phone, String Booking_people, String Booking_datetime, String Booking_date, String Booking_time, String Booking_comment) {
         Intent intent_edit = new Intent (ctx,EditBooking.class);
         EditBooking.AndroidID = android_id;
         EditBooking.BookingID_edit = booking_id;
         intent_edit.putExtra("Booking_name",Booking_name);
         intent_edit.putExtra("Booking_phone",Booking_phone);
         intent_edit.putExtra("Booking_people",Booking_people);
+        intent_edit.putExtra("Booking_datetime",Booking_datetime);
         intent_edit.putExtra("Booking_date",Booking_date);
         intent_edit.putExtra("Booking_time",Booking_time);
         intent_edit.putExtra("Booking_comment",Booking_comment);
