@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.Gravity;
@@ -42,7 +43,7 @@ public class EditBooking extends AppCompatActivity {
     private Calendar selectedCalendar;
     BookingInterface bookingInterface;
     static String BookingID_edit = "";
-    private String AndroidID;
+    static String AndroidID;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -311,6 +312,7 @@ public class EditBooking extends AppCompatActivity {
 
     // Дії при натисканні на кнопку "Зберегти зміни"
     public void SaveButtonClick(View view) {
+        String AndroidID = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         String name = nameEditText.getText().toString().trim();
         String phone = phoneEditText.getText().toString().trim();
         String comment = commentEditText.getText().toString().trim();
