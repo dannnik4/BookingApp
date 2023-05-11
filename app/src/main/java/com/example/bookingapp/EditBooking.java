@@ -39,6 +39,7 @@ public class EditBooking extends AppCompatActivity {
     TextView NumberOfPeopleValue, SelectedDate, SelectedTime;
     SeekBar NumberOfPeopleSeekBar;
     Button selectTimeButton;
+    private Calendar selectedCalendar;
     BookingInterface bookingInterface;
     static String BookingID_edit = "";
 
@@ -104,10 +105,13 @@ public class EditBooking extends AppCompatActivity {
 
     // Відображення діалогового вікна для вибору дати
     public void setDate(View v) {
+        if (selectedCalendar == null) {
+            selectedCalendar = Calendar.getInstance();
+        }
         new DatePickerDialog(EditBooking.this, d,
-                dateAndTime.get(Calendar.YEAR),
-                dateAndTime.get(Calendar.MONTH),
-                dateAndTime.get(Calendar.DAY_OF_MONTH))
+                selectedCalendar.get(Calendar.YEAR),
+                selectedCalendar.get(Calendar.MONTH),
+                selectedCalendar.get(Calendar.DAY_OF_MONTH))
                 .show();
     }
 
@@ -130,6 +134,7 @@ public class EditBooking extends AppCompatActivity {
             // Створення календаря з обраною датою
             Calendar selectedDate = Calendar.getInstance();
             selectedDate.set(year, monthOfYear, dayOfMonth);
+            selectedCalendar = selectedDate;
 
             // Порівняння вибраної дати з поточною датою
             Calendar currentDate = Calendar.getInstance();
@@ -147,11 +152,27 @@ public class EditBooking extends AppCompatActivity {
                     dateAndTime.set(Calendar.YEAR, year);
                     dateAndTime.set(Calendar.MONTH, monthOfYear);
                     dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                    // Якщо обран поточний день, тоді в HOUR_OF_DAY записується поточна година
+                    Calendar now = Calendar.getInstance();
+                    if (dateAndTime.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                            dateAndTime.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
+                            dateAndTime.get(Calendar.DAY_OF_MONTH) == currentDate.get(Calendar.DAY_OF_MONTH)) {
+                        int hourOfDay = now.get(Calendar.HOUR_OF_DAY);
+                        dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    } else {
+                        // Якщо обран інший день у майбутньому, тоді година ставиться на 0, щоб бронювання показувалися з 8 години
+                        dateAndTime.set(Calendar.HOUR_OF_DAY, 0);
+                    }
+
                     // Форматуємо дату у відповідний вигляд та встановлюємо її в SelectedDate
                     String formattedDate = DateUtils.formatDateTime(EditBooking.this,
                             dateAndTime.getTimeInMillis(),
                             DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
                     SelectedDate.setText(formattedDate);
+
+                    // Оновлення часу в рядку з часом бронювання
+                    setInitialTime();
                 }
             }
         }
@@ -159,21 +180,20 @@ public class EditBooking extends AppCompatActivity {
 
     // Встановлення початкового часу
     private void setInitialTime() {
-        // Получить текущую дату и время
+        // Отримати поточний час
         Calendar now = Calendar.getInstance();
         int hourOfDay = now.get(Calendar.HOUR_OF_DAY);
-        int minute = now.get(Calendar.MINUTE);
 
-        // Получить выбранную дату и время
+        // Отримати вибрану дату та час
         Calendar selectedTime = Calendar.getInstance();
         selectedTime.setTimeInMillis(dateAndTime.getTimeInMillis());
 
-        // Если выбранная дата больше, чем текущая дата
+        // Якщо вибрана дата більша, ніж поточна дата
         if (dateAndTime.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
                 dateAndTime.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
                 dateAndTime.get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH)) {
-            if (hourOfDay >= 19 || hourOfDay < 8 || (hourOfDay == 8 && minute < 0)) {
-                // Встановити час на 8:00
+            if (hourOfDay >= 19 || hourOfDay < 7) {
+                // Встановити годину на 8:00
                 now.set(Calendar.HOUR_OF_DAY, 8);
                 now.set(Calendar.MINUTE, 0);
 
@@ -188,6 +208,7 @@ public class EditBooking extends AppCompatActivity {
             }
         }
         else {
+            // В інших випадках ставиться 8:00
             now.set(Calendar.HOUR_OF_DAY, 8);
             now.set(Calendar.MINUTE, 0);
         }
@@ -212,46 +233,19 @@ public class EditBooking extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        final Calendar now = Calendar.getInstance();
-        int hourOfDay = now.get(Calendar.HOUR_OF_DAY);
-        int minute = now.get(Calendar.MINUTE);
+        int startHour = calendar.get(Calendar.HOUR_OF_DAY); // Отримуємо поточну годину
+        int maxValue = 20; // Максимальне значення години
 
-        if (dateAndTime.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
-                dateAndTime.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) &&
-                dateAndTime.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH)) {
-            if (hourOfDay >= 19 || hourOfDay < 8 || (hourOfDay == 8 && minute < 0)) {
-                // Встановити час на 8:00
-                now.set(Calendar.HOUR_OF_DAY, 8);
-                now.set(Calendar.MINUTE, 0);
+        final NumberPicker hourPicker = new NumberPicker(this); // Створюємо NumberPicker для годин
+        hourPicker.setMinValue(startHour); // Встановлюємо мінімальне значення години
+        hourPicker.setMaxValue(maxValue); // Встановлюємо максимальне значення години
+        hourPicker.setValue(startHour); // Встановлюємо початкове значення години
 
-                // Якщо поточний час пізніше 19:00, встановити дату на наступний день
-                if (hourOfDay >= 19) {
-                    now.add(Calendar.DAY_OF_MONTH, 1);
-                }
-            } else {
-                // Встановити годину бронювання на найближчі 2 години від години на момент початку бронювання
-                now.set(Calendar.MINUTE, 0);
-                now.add(Calendar.HOUR_OF_DAY, 2);
-            }
-        }
-        else {
-            now.set(Calendar.HOUR_OF_DAY, 8);
-            now.set(Calendar.MINUTE, 0);
-        }
-
-        int startHour = now.get(Calendar.HOUR_OF_DAY);
-        int maxValue = 20;
-
-        final NumberPicker hourPicker = new NumberPicker(this);
-        hourPicker.setMinValue(startHour);
-        hourPicker.setMaxValue(maxValue);
-        hourPicker.setValue(startHour);
-
-        final NumberPicker minutePicker = new NumberPicker(this);
-        minutePicker.setMinValue(0);
-        minutePicker.setMaxValue(5);
-        minutePicker.setDisplayedValues(new String[]{"00", "10", "20", "30", "40", "50"});
-        minutePicker.setValue(Calendar.MINUTE / 10);
+        final NumberPicker minutePicker = new NumberPicker(this); // Створюємо NumberPicker для хвилин
+        minutePicker.setMinValue(0); // Встановлюємо мінімальне значення хвилин
+        minutePicker.setMaxValue(5); // Встановлюємо максимальне значення хвилин
+        minutePicker.setDisplayedValues(new String[]{"00", "10", "20", "30", "40", "50"}); // Встановлюємо значення хвилин для відображення
+        minutePicker.setValue(Calendar.MINUTE / 10); // Встановлюємо початкове значення хвилин
 
         // Створення макету для відображення віджету
         LinearLayout layout = new LinearLayout(this);
