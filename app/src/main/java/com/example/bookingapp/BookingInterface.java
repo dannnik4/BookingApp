@@ -29,7 +29,7 @@ public interface BookingInterface {
     );
 
     @FormUrlEncoded // Анотація FormUrlEncoded для вказівки того, що параметри повинні кодуватися у форматі URL-кодування
-    @PUT("booking") // Метод PUT
+    @PUT("booking") // Метод PUT, який заміняє змінні бронювання у базі даних
     Call<AddBooking> putBooking(
             // Анотації Field для позначення полів, що відповідають вхідним параметрам для PUT-запиту
             @Field("booking_id_old") String BookingID,
@@ -42,9 +42,8 @@ public interface BookingInterface {
     );
 
 
-    @FormUrlEncoded // Анотація FormUrlEncoded для вказівки того, що параметри повинні кодуватися у форматі URL-кодування
-    @HTTP(method = "DELETE", path = "Booking", hasBody = true)
+    @FormUrlEncoded
+    @HTTP(method = "DELETE", path = "Booking", hasBody = true) // Оголошення метода DELETE
     Call<AddBooking> deleteBooking(
-            // Анотації Field для позначення полів, що відповідають вхідним параметрам для PUT-запиту
-            @Field("booking_id") String BookingID);
+            @Field("booking_id") String BookingID); // Відправляє запит на видалення бронювання з вказаним ID
 }
