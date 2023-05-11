@@ -20,6 +20,9 @@ public class Booking {
     @SerializedName("booking_people")
     private String booking_people;
 
+    @SerializedName("booking_datetime")
+    private String booking_datetime;
+
     @SerializedName("booking_date")
     private String booking_date;
 
@@ -68,6 +71,14 @@ public class Booking {
 
     public void setBooking_people(String booking_people) {
         this.booking_people = booking_people;
+    }
+
+    public String getBooking_datetime() {
+        return booking_datetime;
+    }
+
+    public void setBooking_datetime(String booking_datetime) {
+        this.booking_datetime = booking_datetime;
     }
 
     public String getBooking_date() {
