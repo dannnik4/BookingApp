@@ -32,7 +32,7 @@
             <!-- Текст бронювання -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ViewBookings"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
