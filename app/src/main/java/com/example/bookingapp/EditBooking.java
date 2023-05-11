@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -49,6 +50,10 @@ public class EditBooking extends AppCompatActivity {
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_editbooking);
+
+        nameEditText = findViewById(R.id.NameEditText);
+        phoneEditText = findViewById(R.id.PhoneEditText);
+        commentEditText = findViewById(R.id.CommentEditText);
 
         // Оголошення змінних для обирання кількості осіб
         NumberOfPeopleSeekBar = findViewById(R.id.NumberOfPeopleSeekBar);
@@ -83,6 +88,13 @@ public class EditBooking extends AppCompatActivity {
         setInitialDate();
         setInitialTime();
 
+        nameEditText.setText(getIntent().getExtras().getString("Booking_name"));
+        phoneEditText.setText(getIntent().getExtras().getString("Booking_phone"));
+        NumberOfPeopleValue.setText(getIntent().getExtras().getString("Booking_people"));
+        SelectedDate.setText(getIntent().getExtras().getString("Booking_date"));
+        SelectedTime.setText(getIntent().getExtras().getString("Booking_time"));
+        commentEditText.setText(getIntent().getExtras().getString("Booking_comment"));
+
         // Оголошення та обробник натискання на кнопку часу
         selectTimeButton = findViewById(R.id.TimeButton);
         selectTimeButton.setOnClickListener(new View.OnClickListener() {
@@ -92,16 +104,14 @@ public class EditBooking extends AppCompatActivity {
             }
         });
 
-        nameEditText = findViewById(R.id.NameEditText);
-        phoneEditText = findViewById(R.id.PhoneEditText);
-        commentEditText = findViewById(R.id.CommentEditText);
-
-        nameEditText.setText(getIntent().getExtras().getString("Booking_name"));
-        phoneEditText.setText(getIntent().getExtras().getString("Booking_phone"));
-        NumberOfPeopleValue.setText(getIntent().getExtras().getString("Booking_people"));
-        SelectedDate.setText(getIntent().getExtras().getString("Booking_date"));
-        SelectedTime.setText(getIntent().getExtras().getString("Booking_time"));
-        commentEditText.setText(getIntent().getExtras().getString("Booking_comment"));
+        // Оголошення та обробник натискання на кнопку часу
+        selectTimeButton = findViewById(R.id.TimeButton);
+        selectTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePickerDialog();
+            }
+        });
 
     }
 
@@ -317,6 +327,14 @@ public class EditBooking extends AppCompatActivity {
         String phone = phoneEditText.getText().toString().trim();
         String comment = commentEditText.getText().toString().trim();
 
+        // Перетворимо об'єкт GregorianCalendar на Date
+        dateAndTime.set(Calendar.SECOND, 0);
+        Date date = dateAndTime.getTime();
+
+        // Форматуємо дату у потрібному форматі
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = outputFormat.format(date);
+
         // Перевірка, чи заповнені ім'я та номер телефону та наявність підключення до інтернету
         if (name.isEmpty() || phone.isEmpty()) {
             Toast.makeText(this, "Будь ласка, заповніть всі поля", Toast.LENGTH_SHORT).show();
@@ -355,6 +373,7 @@ public class EditBooking extends AppCompatActivity {
         builder.setPositiveButton("ОК", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 // Дії при натисканні на кнопку "OK"
                 bookingInterface = ApiClient.getClient().create(BookingInterface.class);
                 Call<AddBooking> putBooking = bookingInterface.putBooking(
@@ -363,6 +382,7 @@ public class EditBooking extends AppCompatActivity {
                         nameEditText.getText().toString(),
                         phoneEditText.getText().toString(),
                         Integer.parseInt(NumberOfPeopleValue.getText().toString()),
+                        formattedDateTime,
                         SelectedDate.getText().toString(),
                         SelectedTime.getText().toString(),
                         commentEditText.getText().toString()
