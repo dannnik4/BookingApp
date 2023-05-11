@@ -72,13 +72,14 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
 
         Button EditButton = holder.itemView.findViewById(R.id.EditButton);
         Button DeleteButton = holder.itemView.findViewById(R.id.DeleteButton);
+        String android_id = mBookingList.get(position).getAndroid_id();
         String booking_id = mBookingList.get(position).getBooking_id();
 
         // Установка обробника натискання кнопки EditBooking
         EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onEditButtonClick(view, holder.getAdapterPosition(), booking_id, mBookingList.get(position).getBooking_name(), mBookingList.get(position).getBooking_phone(), mBookingList.get(position).getBooking_people(), mBookingList.get(position).getBooking_date(), mBookingList.get(position).getBooking_time(), mBookingList.get(position).getBooking_comment());
+                onEditButtonClick(view, holder.getAdapterPosition(), android_id, booking_id, mBookingList.get(position).getBooking_name(), mBookingList.get(position).getBooking_phone(), mBookingList.get(position).getBooking_people(), mBookingList.get(position).getBooking_date(), mBookingList.get(position).getBooking_time(), mBookingList.get(position).getBooking_comment());
             }
         });
 
@@ -92,8 +93,9 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
     }
 
     // Метод обробки натискання кнопки EditBooking
-    private void onEditButtonClick(View view, int position, String booking_id, String Booking_name, String Booking_phone, String Booking_people, String Booking_date, String Booking_time, String Booking_comment) {
+    private void onEditButtonClick(View view, int position, String android_id, String booking_id, String Booking_name, String Booking_phone, String Booking_people, String Booking_date, String Booking_time, String Booking_comment) {
         Intent intent_edit = new Intent (ctx,EditBooking.class);
+        EditBooking.AndroidID = android_id;
         EditBooking.BookingID_edit = booking_id;
         intent_edit.putExtra("Booking_name",Booking_name);
         intent_edit.putExtra("Booking_phone",Booking_phone);
