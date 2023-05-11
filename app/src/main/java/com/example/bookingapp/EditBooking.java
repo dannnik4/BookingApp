@@ -42,6 +42,7 @@ public class EditBooking extends AppCompatActivity {
     private Calendar selectedCalendar;
     BookingInterface bookingInterface;
     static String BookingID_edit = "";
+    private String AndroidID;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -355,6 +356,7 @@ public class EditBooking extends AppCompatActivity {
                 // Дії при натисканні на кнопку "OK"
                 bookingInterface = ApiClient.getClient().create(BookingInterface.class);
                 Call<AddBooking> putBooking = bookingInterface.putBooking(
+                        AndroidID,
                         BookingID_edit,
                         nameEditText.getText().toString(),
                         phoneEditText.getText().toString(),
