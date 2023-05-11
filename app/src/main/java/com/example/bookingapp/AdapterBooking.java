@@ -59,7 +59,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         Button DeleteButton = holder.itemView.findViewById(R.id.DeleteButton);
         String booking_id = mBookingList.get(position).getBooking_id();
 
-        // Установка обработчика нажатия кнопки EditBooking
+        // Установка обробника натискання кнопки EditBooking
         EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +67,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
             }
         });
 
-        // Установка обработчика нажатия кнопки DeleteBooking
+        // Установка обробника натискання кнопки DeleteBooking
         DeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +76,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         });
     }
 
-    // Метод для обработки нажатия кнопки EditBooking
+    // Метод обробки натискання кнопки EditBooking
     private void onEditButtonClick(View view, int position, String booking_id, String Booking_name, String Booking_phone, String Booking_people, String Booking_date, String Booking_time, String Booking_comment) {
         Intent intent_edit = new Intent (ctx,EditBooking.class);
         EditBooking.BookingID_edit = booking_id;
@@ -89,7 +89,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
         ctx.startActivity(intent_edit);
     }
 
-    // Метод для обработки нажатия кнопки DeleteBooking
+    // Метод обробки натискання кнопки DeleteBooking
     private void onDeleteButtonClick(View view, int position, String booking_id) {
         BookingInterface bookingInterface = ApiClient.getClient().create(BookingInterface.class);
         Call<AddBooking> delBooking = bookingInterface.deleteBooking(
