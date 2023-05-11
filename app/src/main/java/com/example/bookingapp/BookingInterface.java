@@ -24,6 +24,7 @@ public interface BookingInterface {
       @Field("booking_name") String nameEditText,
       @Field("booking_phone") String phoneEditText,
       @Field("booking_people") Integer NumberOfPeopleValue,
+      @Field("booking_datetime") String formattedDateTime,
       @Field("booking_date") String SelectedDate,
       @Field("booking_time") String SelectedTime,
       @Field("booking_comment") String commentEditText
@@ -38,6 +39,7 @@ public interface BookingInterface {
             @Field("booking_name") String nameEditText,
             @Field("booking_phone") String phoneEditText,
             @Field("booking_people") Integer NumberOfPeopleValue,
+            @Field("booking_datetime") String formattedDateTime,
             @Field("booking_date") String SelectedDate,
             @Field("booking_time") String SelectedTime,
             @Field("booking_comment") String commentEditText
