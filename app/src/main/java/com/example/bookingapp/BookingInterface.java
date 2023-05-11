@@ -20,6 +20,7 @@ public interface BookingInterface {
     @POST("booking") // Метод POST, який додає нове бронювання до бази даних
     Call<AddBooking> postBooking(
       // Анотації Field для позначення полів, що відповідають вхідним параметрам для POST-запиту
+      @Field("android_id") String AndroidID,
       @Field("booking_name") String nameEditText,
       @Field("booking_phone") String phoneEditText,
       @Field("booking_people") Integer NumberOfPeopleValue,
@@ -32,6 +33,7 @@ public interface BookingInterface {
     @PUT("booking") // Метод PUT, який заміняє змінні бронювання у базі даних
     Call<AddBooking> putBooking(
             // Анотації Field для позначення полів, що відповідають вхідним параметрам для PUT-запиту
+            @Field("android_id") String AndroidID,
             @Field("booking_id_old") String BookingID,
             @Field("booking_name") String nameEditText,
             @Field("booking_phone") String phoneEditText,
