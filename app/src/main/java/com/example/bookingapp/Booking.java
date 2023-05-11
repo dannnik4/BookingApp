@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 public class Booking {
 
     // Оголошення полів об'єктів бронювання
+    @SerializedName("android_id")
+    private String android_id;
+
     @SerializedName("booking_id")
     private String booking_id;
 
@@ -27,6 +30,14 @@ public class Booking {
     private String booking_comment;
 
     // Оголошення методів геттерів і сеттерів для кожного об'єкту бронювання
+    public String getAndroid_id() {
+        return android_id;
+    }
+
+    public void setAndroid_id(String android_id) {
+        this.android_id = android_id;
+    }
+
     public String getBooking_id() {
         return booking_id;
     }
