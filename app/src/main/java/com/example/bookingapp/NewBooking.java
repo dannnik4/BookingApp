@@ -42,6 +42,7 @@ public class NewBooking extends AppCompatActivity {
     Button selectTimeButton;
     private Calendar selectedCalendar;
     BookingInterface bookingInterface;
+    private int hourOfDay;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -86,7 +87,7 @@ public class NewBooking extends AppCompatActivity {
         selectTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimePickerDialog();
+                showTimePickerDialog(hourOfDay);
             }
         });
 
@@ -171,16 +172,16 @@ public class NewBooking extends AppCompatActivity {
     private void setInitialTime() {
         // Отримати поточний час
         Calendar now = Calendar.getInstance();
-        int hourOfDay = now.get(Calendar.HOUR_OF_DAY);
+        hourOfDay = now.get(Calendar.HOUR_OF_DAY);
 
         // Отримати вибрану дату та час
         Calendar selectedTime = Calendar.getInstance();
         selectedTime.setTimeInMillis(dateAndTime.getTimeInMillis());
 
         // Якщо вибрана дата більша, ніж поточна дата
-        if (dateAndTime.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
-                dateAndTime.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
-                dateAndTime.get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH)) {
+        if (selectedTime.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
+                selectedTime.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
+                selectedTime.get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH)) {
             if (hourOfDay >= 19 || hourOfDay < 7) {
                 // Встановити годину на 8:00
                 now.set(Calendar.HOUR_OF_DAY, 8);
@@ -206,23 +207,37 @@ public class NewBooking extends AppCompatActivity {
         SelectedTime.setText(DateUtils.formatDateTime(this,
                 now.getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_TIME));
-        dateAndTime.setTimeInMillis(now.getTimeInMillis());
+
+        hourOfDay = now.get(Calendar.HOUR_OF_DAY);
+        int minute = now.get(Calendar.MINUTE);
+
+        dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        dateAndTime.set(Calendar.MINUTE, minute);
     }
 
     // Створення віджету для обирання годин та хвилин
-    private void showTimePickerDialog() {
+    private void showTimePickerDialog(int hourOfDay) {
 
         // Отримання поточного часу
         String currentTimeString = SelectedTime.getText().toString();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
+        Calendar currentDate = Calendar.getInstance();
         try {
             calendar.setTime(dateFormat.parse(currentTimeString));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        int startHour = calendar.get(Calendar.HOUR_OF_DAY); // Отримуємо поточну годину
+        int startHour;
+        if (dateAndTime.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                dateAndTime.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
+                dateAndTime.get(Calendar.DAY_OF_MONTH) == currentDate.get(Calendar.DAY_OF_MONTH)) {
+            startHour = hourOfDay; // Якщо ні, залишити як є
+        } else {
+            startHour = 8; // Якщо так, то встановити початкову годину на 8
+        }
+
         int maxValue = 20; // Максимальне значення години
 
         final NumberPicker hourPicker = new NumberPicker(this); // Створюємо NumberPicker для годин
@@ -274,7 +289,6 @@ public class NewBooking extends AppCompatActivity {
                 selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 selectedTime.set(Calendar.MINUTE, minute);
 
-                Calendar currentDate = Calendar.getInstance();
                 if (dateAndTime.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
                         dateAndTime.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
                         dateAndTime.get(Calendar.DAY_OF_MONTH) == currentDate.get(Calendar.DAY_OF_MONTH)) {
@@ -291,6 +305,9 @@ public class NewBooking extends AppCompatActivity {
                     String timeString = String.format("%02d:%02d", hourOfDay, minute);
                     SelectedTime.setText(timeString);
                 }
+
+                dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                dateAndTime.set(Calendar.MINUTE, minute);
             }
         });
         builder.setNegativeButton("Відмінити", null);
