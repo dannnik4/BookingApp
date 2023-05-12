@@ -365,8 +365,6 @@ public class EditBooking extends AppCompatActivity {
         // Створення тексту для діалогу
         String message = "Ім'я: <b>" + name + "</b>" + "<br>" +
                 "Номер телефону: <b>" + phone + "</b>" + "<br>" +
-                "Номер телефону: <b>" + dateAndTime + "</b>" + "<br>" +
-                "Номер телефону: <b>" + formattedDateTime + "</b>" + "<br>" +
                 "Кількість людей: <b>" + NumberOfPeopleValue.getText().toString() + "</b>" + "<br>" +
                 "Дата бронювання: <b>" + SelectedDate.getText().toString() + "</b>" + "<br>" +
                 "Час бронювання: <b>" + SelectedTime.getText().toString() + "</b>";
