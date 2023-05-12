@@ -45,6 +45,7 @@ public class EditBooking extends AppCompatActivity {
     BookingInterface bookingInterface;
     static String BookingID_edit = "";
     static String AndroidID;
+    private int hourOfDay;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -60,7 +61,33 @@ public class EditBooking extends AppCompatActivity {
         NumberOfPeopleValue = findViewById(R.id.NumberOfPeopleValue);
         NumberOfPeopleValue.setText(String.valueOf(NumberOfPeopleSeekBar.getProgress()));
 
+        //Оголошення змінних для дати та часу
+        SelectedDate = findViewById(R.id.SelectedDate);
+        SelectedTime = findViewById(R.id.SelectedTime);
+
+        // Встановлення початкової дати та часу
+        setInitialDate();
+        setInitialTime();
+
+        nameEditText.setText(getIntent().getExtras().getString("Booking_name"));
+        phoneEditText.setText(getIntent().getExtras().getString("Booking_phone"));
+        NumberOfPeopleValue.setText(getIntent().getExtras().getString("Booking_people"));
+        String bookingDatetime = getIntent().getExtras().getString("Booking_datetime");
+        dateAndTime = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        try {
+            dateAndTime.setTime(sdf.parse(bookingDatetime));
+            SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd MMMM yyyy 'р.'", Locale.getDefault());
+            SimpleDateFormat outputTimeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            SelectedDate.setText(outputDateFormat.format(dateAndTime.getTime()));
+            SelectedTime.setText(outputTimeFormat.format(dateAndTime.getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        commentEditText.setText(getIntent().getExtras().getString("Booking_comment"));
+
         // Обробники натискань на слайдер обирання кількості осіб
+        NumberOfPeopleSeekBar.setProgress(Integer.parseInt(NumberOfPeopleValue.getText().toString()));
         NumberOfPeopleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar NumberOfPeopleSeekBar, int progress, boolean fromUser) {
@@ -80,36 +107,12 @@ public class EditBooking extends AppCompatActivity {
             }
         });
 
-        //Оголошення змінних для дати та часу
-        SelectedDate = findViewById(R.id.SelectedDate);
-        SelectedTime = findViewById(R.id.SelectedTime);
-
-        // Встановлення початкової дати та часу
-        setInitialDate();
-        setInitialTime();
-
-        nameEditText.setText(getIntent().getExtras().getString("Booking_name"));
-        phoneEditText.setText(getIntent().getExtras().getString("Booking_phone"));
-        NumberOfPeopleValue.setText(getIntent().getExtras().getString("Booking_people"));
-        SelectedDate.setText(getIntent().getExtras().getString("Booking_date"));
-        SelectedTime.setText(getIntent().getExtras().getString("Booking_time"));
-        commentEditText.setText(getIntent().getExtras().getString("Booking_comment"));
-
         // Оголошення та обробник натискання на кнопку часу
         selectTimeButton = findViewById(R.id.TimeButton);
         selectTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimePickerDialog();
-            }
-        });
-
-        // Оголошення та обробник натискання на кнопку часу
-        selectTimeButton = findViewById(R.id.TimeButton);
-        selectTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimePickerDialog();
+                showTimePickerDialog(hourOfDay);
             }
         });
 
@@ -129,14 +132,8 @@ public class EditBooking extends AppCompatActivity {
 
     // Встановлення початкової дати
     private void setInitialDate() {
-        Calendar now = Calendar.getInstance();
-        // Якщо поточний час пізніше 19:00
-        if (now.get(Calendar.HOUR_OF_DAY) >= 19) {
-            // Встановити дату на наступний день
-            now.add(Calendar.DAY_OF_MONTH, 1);
-        }
         SelectedDate.setText(DateUtils.formatDateTime(this,
-                now.getTimeInMillis(),
+                dateAndTime.getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
     }
 
@@ -194,16 +191,16 @@ public class EditBooking extends AppCompatActivity {
     private void setInitialTime() {
         // Отримати поточний час
         Calendar now = Calendar.getInstance();
-        int hourOfDay = now.get(Calendar.HOUR_OF_DAY);
+        hourOfDay = now.get(Calendar.HOUR_OF_DAY);
 
         // Отримати вибрану дату та час
         Calendar selectedTime = Calendar.getInstance();
         selectedTime.setTimeInMillis(dateAndTime.getTimeInMillis());
 
         // Якщо вибрана дата більша, ніж поточна дата
-        if (dateAndTime.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
-                dateAndTime.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
-                dateAndTime.get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH)) {
+        if (selectedTime.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
+                selectedTime.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
+                selectedTime.get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH)) {
             if (hourOfDay >= 19 || hourOfDay < 7) {
                 // Встановити годину на 8:00
                 now.set(Calendar.HOUR_OF_DAY, 8);
@@ -218,8 +215,7 @@ public class EditBooking extends AppCompatActivity {
                 now.set(Calendar.MINUTE, 0);
                 now.add(Calendar.HOUR_OF_DAY, 2);
             }
-        }
-        else {
+        } else {
             // В інших випадках ставиться 8:00
             now.set(Calendar.HOUR_OF_DAY, 8);
             now.set(Calendar.MINUTE, 0);
@@ -229,23 +225,37 @@ public class EditBooking extends AppCompatActivity {
         SelectedTime.setText(DateUtils.formatDateTime(this,
                 now.getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_TIME));
-        dateAndTime.setTimeInMillis(now.getTimeInMillis());
+
+        hourOfDay = now.get(Calendar.HOUR_OF_DAY);
+        int minute = now.get(Calendar.MINUTE);
+
+        dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        dateAndTime.set(Calendar.MINUTE, minute);
     }
 
     // Створення віджету для обирання годин та хвилин
-    private void showTimePickerDialog() {
+    private void showTimePickerDialog(int hourOfDay) {
 
         // Отримання поточного часу
         String currentTimeString = SelectedTime.getText().toString();
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
+        Calendar currentDate = Calendar.getInstance();
         try {
             calendar.setTime(dateFormat.parse(currentTimeString));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        int startHour = calendar.get(Calendar.HOUR_OF_DAY); // Отримуємо поточну годину
+        int startHour;
+        if (dateAndTime.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                dateAndTime.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
+                dateAndTime.get(Calendar.DAY_OF_MONTH) == currentDate.get(Calendar.DAY_OF_MONTH)) {
+            startHour = hourOfDay; // Якщо ні, залишити як є
+        } else {
+            startHour = 8; // Якщо так, то встановити початкову годину на 8
+        }
+
         int maxValue = 20; // Максимальне значення години
 
         final NumberPicker hourPicker = new NumberPicker(this); // Створюємо NumberPicker для годин
@@ -297,7 +307,6 @@ public class EditBooking extends AppCompatActivity {
                 selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 selectedTime.set(Calendar.MINUTE, minute);
 
-                Calendar currentDate = Calendar.getInstance();
                 if (dateAndTime.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
                         dateAndTime.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
                         dateAndTime.get(Calendar.DAY_OF_MONTH) == currentDate.get(Calendar.DAY_OF_MONTH)) {
@@ -314,6 +323,9 @@ public class EditBooking extends AppCompatActivity {
                     String timeString = String.format("%02d:%02d", hourOfDay, minute);
                     SelectedTime.setText(timeString);
                 }
+
+                dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                dateAndTime.set(Calendar.MINUTE, minute);
             }
         });
         builder.setNegativeButton("Відмінити", null);
@@ -339,7 +351,8 @@ public class EditBooking extends AppCompatActivity {
         if (name.isEmpty() || phone.isEmpty()) {
             Toast.makeText(this, "Будь ласка, заповніть всі поля", Toast.LENGTH_SHORT).show();
             return;
-        } if (MainActivity.isNetworkConnected(view.getContext())) {
+        }
+        if (MainActivity.isNetworkConnected(view.getContext())) {
         } else {
             Toast.makeText(EditBooking.this, "Відсутнє підключення до інтернету", Toast.LENGTH_SHORT).show();
             return;
@@ -352,6 +365,8 @@ public class EditBooking extends AppCompatActivity {
         // Створення тексту для діалогу
         String message = "Ім'я: <b>" + name + "</b>" + "<br>" +
                 "Номер телефону: <b>" + phone + "</b>" + "<br>" +
+                "Номер телефону: <b>" + dateAndTime + "</b>" + "<br>" +
+                "Номер телефону: <b>" + formattedDateTime + "</b>" + "<br>" +
                 "Кількість людей: <b>" + NumberOfPeopleValue.getText().toString() + "</b>" + "<br>" +
                 "Дата бронювання: <b>" + SelectedDate.getText().toString() + "</b>" + "<br>" +
                 "Час бронювання: <b>" + SelectedTime.getText().toString() + "</b>";
@@ -390,14 +405,14 @@ public class EditBooking extends AppCompatActivity {
                 putBooking.enqueue(new Callback<AddBooking>() {
                     @Override
                     public void onResponse(Call<AddBooking> call, Response<AddBooking> response) {
-                        Toast.makeText(EditBooking.this,"Бронювання збережено", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditBooking.this, "Бронювання збережено", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(EditBooking.this, MainActivity.class);
                         startActivity(intent);
                     }
 
                     @Override
                     public void onFailure(Call<AddBooking> call, Throwable t) {
-                        Toast.makeText(EditBooking.this,"Помилка", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditBooking.this, "Помилка", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
