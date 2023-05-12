@@ -33,7 +33,7 @@ import retrofit2.Response;
 
 public class NewBooking extends AppCompatActivity {
 
-    //Отримання поточної дати та часу
+    // Отримання поточної дати та часу
     Calendar dateAndTime = Calendar.getInstance();
 
     // Ініціалізація змінних
@@ -73,7 +73,7 @@ public class NewBooking extends AppCompatActivity {
             }
         });
 
-        //Оголошення змінних для дати та часу
+        // Оголошення змінних для дати та часу
         SelectedDate = findViewById(R.id.SelectedDate);
         SelectedTime = findViewById(R.id.SelectedTime);
 
@@ -310,7 +310,6 @@ public class NewBooking extends AppCompatActivity {
         EditText commentEditText = findViewById(R.id.CommentEditText);
         String comment = commentEditText.getText().toString().trim();
 
-        // Перетворимо об'єкт GregorianCalendar на Date
         dateAndTime.set(Calendar.SECOND, 0);
         Date date = dateAndTime.getTime();
 
