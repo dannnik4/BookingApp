@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,7 +40,14 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
                 iterator.remove();
             }
         }
-        // Зберігаємо список бронювань, що відносяться до поточного пристрою
+        // Сортуємо список бронювань за зростанням часу
+        Collections.sort(mBookingList, new Comparator<Booking>() {
+            @Override
+            public int compare(Booking b1, Booking b2) {
+                return b1.getBooking_datetime().compareTo(b2.getBooking_datetime());
+            }
+        });
+        // ...// Зберігаємо список бронювань, що відносяться до поточного пристрою
         this.mBookingList = mBookingList;
     }
 
