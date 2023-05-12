@@ -30,7 +30,7 @@ public interface BookingInterface {
       @Field("booking_comment") String commentEditText
     );
 
-    @FormUrlEncoded // Анотація FormUrlEncoded для вказівки того, що параметри повинні кодуватися у форматі URL-кодування
+    @FormUrlEncoded
     @PUT("booking") // Метод PUT, який заміняє змінні бронювання у базі даних
     Call<AddBooking> putBooking(
             // Анотації Field для позначення полів, що відповідають вхідним параметрам для PUT-запиту
@@ -44,7 +44,6 @@ public interface BookingInterface {
             @Field("booking_time") String SelectedTime,
             @Field("booking_comment") String commentEditText
     );
-
 
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "Booking", hasBody = true) // Оголошення метода DELETE
