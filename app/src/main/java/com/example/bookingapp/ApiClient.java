@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    // Адреса веб-сайта на якому розміщений сервер
+    // Адреса веб-сайту на якому розміщений сервер
     public static final String url_website = "http:/192.168.10.200:8080/restapi-master/";
 
     // Створення змінної retrofit зі значенням null
