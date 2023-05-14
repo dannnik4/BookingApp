@@ -123,6 +123,16 @@ public class EditBooking extends AppCompatActivity {
         if (selectedCalendar == null) {
             selectedCalendar = Calendar.getInstance();
         }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy 'р.'", Locale.getDefault());
+        Date date;
+        try {
+            date = dateFormat.parse(SelectedDate.getText().toString());
+            selectedCalendar.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         new DatePickerDialog(EditBooking.this, d,
                 selectedCalendar.get(Calendar.YEAR),
                 selectedCalendar.get(Calendar.MONTH),
