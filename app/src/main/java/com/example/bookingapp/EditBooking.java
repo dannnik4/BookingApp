@@ -33,7 +33,7 @@ import retrofit2.Response;
 
 public class EditBooking extends AppCompatActivity {
 
-    //Отримання поточної дати та часу
+    // Отримання поточної дати та часу
     Calendar dateAndTime = Calendar.getInstance();
 
     // Ініціалізація змінних
