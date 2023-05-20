@@ -47,7 +47,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.MyViewHo
                 return b1.getBooking_datetime().compareTo(b2.getBooking_datetime());
             }
         });
-        // ...// Зберігаємо список бронювань, що відносяться до поточного пристрою
+        // Зберігаємо список бронювань, що відносяться до поточного пристрою
         this.mBookingList = mBookingList;
     }
 
